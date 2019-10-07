@@ -24,12 +24,11 @@ class LemniscatClass
 {
 private:
 	Pr c;
-	Pr ro;
-	Pr fi;
+	//Pr ro;
+	//Pr fi;
 	Pr_p F1;
 	Pr_p F2;
 
-	bool acces2eq(Point a) const;
 	double get_c_p(Point a) const;
 
 public:
@@ -38,13 +37,13 @@ public:
 
 	/*геттеры и сеттеры */
 	double get_c() const;
-	double get_fi() const;
-	double get_ro() const;
+	//double get_fi() const;
+	//double get_ro() const;
 	Point get_F1() const;
 	Point get_F2() const;
 
 	void set_c(double c);
-	void set_fi(double fi);
+	/*void set_fi(double fi);*/
 	void set_Foc(Point F1, Point F2);
 
 	/* методы класса */
