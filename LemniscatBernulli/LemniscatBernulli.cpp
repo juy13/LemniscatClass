@@ -5,9 +5,44 @@
 #include <iostream>
 #include "LemniscatClass.h"
 
+bool getNum(double& num)
+{
+	double n;
+	std::cin >> n;
+
+	bool g = std::cin.good();
+
+	if (g)
+		num = n;
+
+	return g;
+}
+
+void input_par(double &par)
+{
+	double a;
+	while (true)
+	{
+		bool fl = getNum(a);
+		if (fl == false)
+		{
+			std::cout << "Error, try again: ";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		if (fl == true)
+		{
+			par = a;
+			break;
+		}
+	}
+}
+
+
 int main()
 {
-	LemniscatClass a(33);
+	LemniscatClass a;
 	int fl1 = 1;
 	double fi = 0;
 	double ro = 0;
@@ -18,8 +53,8 @@ int main()
 		{
 			goto N1;
 		}
-		std::cout << "Input your fi: ";
-		std::cin >> fi;
+		std::cout << "Input your fi in grad: ";
+		input_par(fi);
 		try
 		{
 			std::cout << "distance to centre in polar system: " << a.Len2Cent(fi) << std::endl;
@@ -39,7 +74,7 @@ int main()
 		}
 		
 		std::cout << "Input your polar rad: ";
-		std::cin >> ro;
+		input_par(ro);
 
 		try
 		{
@@ -69,7 +104,7 @@ int main()
 		}
 		
 N1:
-		int choice;
+		double choice;
 		std::cout << "Enter your choice to continue or press ctrl+Z to quit:" << std::endl;
 		std::cout << "1) Input c " << std::endl;
 		std::cout << "2) Input F1 and F2" << std::endl;
@@ -83,7 +118,7 @@ N1:
 				{
 					std::cout << "Input your c: ";
 					double c;
-					std::cin >> c;
+					input_par(c);
 					a.set_c(c);
 				}
 				catch (std::exception &ex)
@@ -99,14 +134,14 @@ N1:
 					std::cout << "Input your F1(x): ";
 					Point f1;
 					Point f2;
-					std::cin >> f1.x;
+					input_par(f1.x);
 					std::cout << "Input your F1(y): ";
-					std::cin >> f1.y;
+					input_par(f1.y);
 
 					std::cout << "Input your F2(x): ";
-					std::cin >> f2.x;
+					input_par(f2.x);
 					std::cout << "Input your F2(y): ";
-					std::cin >> f2.y;
+					input_par(f2.y);
 					a.set_Foc(f1, f2);
 				}
 				catch (std::exception &ex)
@@ -121,32 +156,4 @@ N1:
 
 		system("pause");
 	}
-
-
-	//LemniscatClass a(33);
-	//std::cout << a.get_c() << std::endl;
-	//std::cout << a.get_F1() << std::endl;
-	//std::cout << a.get_F2() << std::endl;
-	//try
-	//{
-	//	std::cout << a.Len2Cent(1.54) << std::endl;
-	//}
-	//catch (const std::exception& ex)
-	//{
-	//	std::cout << ex.what() << std::endl;
-	//}
-	//
-	//Point a1(3, 0);
-	//Point a2(-3, 0);
-	//try
-	//{
-	//	LemniscatClass b(a1, a2);
-	//	std::cout << b.get_c() << std::endl;
-	//	std::cout << b.get_F1() << std::endl;
-	//	std::cout << b.get_F2() << std::endl;
-	//}
-	//catch (const std::exception& ex)
-	//{
-	//	std::cout << ex.what() << std::endl;
-	//}
 }

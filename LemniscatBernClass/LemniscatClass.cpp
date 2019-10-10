@@ -1,11 +1,8 @@
 #include "stdafx.h"
 #define _USE_MATH_DEFINES 
 #include "LemniscatClass.h"
-#include <cmath>
 #include <stdio.h>
-#include <cstring>
-#include <iostream>
-
+#include <cmath>
 
 
 //bool LemniscatClass::acces2eq(Point a) const
@@ -31,43 +28,28 @@
 //	return 0.0;
 //}
 
-LemniscatClass::LemniscatClass(double c): F1(c/2.0, 0), F2(- (c/2.0), 0)
+LemniscatClass::LemniscatClass(double c) : F1(c / 2.0, 0), F2(-(c / 2.0), 0)
 {
-	if (c < 0)
-		throw std::exception("Too small c");
+	this->c = c;
+	if (c == 0)
+		this->state = "Point";
 	else
-	{
-		this->c.x = c;
-		this->c.active = true;
-		this->F1.active = true;
-		this->F2.active = true;
-		if (c == 0)
-			this->state = "Point";
-		else
-			this->state = "Lemniscat";
-	}
+		this->state = "Lemniscat";
 }
 
 LemniscatClass::LemniscatClass(Point f1, Point f2)
 {
-	double	p1 = abs(f1.x) * abs(f2.x);
-	double c = 2 * p1;
+	double	p1 = f1.x * f2.x;
+	double	p2 = f1.y * f2.y;
+	double c = 2 * abs(p1 + p2);
 
-	if (f1.y != 0 || f2.y != 0)
-		throw std::exception("It isn't a Lemniscat");
+	this->c = c;
+	this->F1 = f1;
+	this->F2 = f2;
+	if (this->c == 0)
+		this->state = "Point";
 	else
-	{
-		this->c.x = c;
-		this->c.active = true;
-		this->F1.x = f1;
-		this->F2.x = f2;
-		this->F1.active = true;
-		this->F2.active = true;
-		if(this->c.x == 0)
-			this->state = "Point";
-		else
-			this->state = "Lemniscat";
-	}
+		this->state = "Lemniscat";
 }
 
 LemniscatClass::~LemniscatClass()
@@ -77,10 +59,7 @@ LemniscatClass::~LemniscatClass()
 
 double LemniscatClass::get_c() const
 {
-	if (this->c.active)
-		return this->c.x;
-	else
-		throw std::exception("There is no activated parametre c");
+	return this->c;
 }
 
 std::string LemniscatClass::get_st() const
@@ -106,18 +85,12 @@ std::string LemniscatClass::get_st() const
 
 Point LemniscatClass::get_F1() const
 {
-	if (this->F1.active)
-		return this->F1.x;
-	else
-		throw std::exception("There is no activated parametre F1");
+	return this->F1.x;
 }
 
 Point LemniscatClass::get_F2() const
 {
-	if (this->F2.active)
-		return this->F2.x;
-	else
-		throw std::exception("There is no activated parametre F2");
+	return this->F2.x;
 }
 
 void LemniscatClass::set_c(double c)
@@ -126,18 +99,15 @@ void LemniscatClass::set_c(double c)
 		throw std::exception("Illegal C, or it is only a point in (0,0)");
 	else
 	{
-		this->F1.x = c/2.0;
-		this->F2.x = -(c/2.0);
-		this->F1.active = true;
-		this->F2.active = true;
-		this->c.x = c;
-		this->c.active = true;
-		if (this->c.x == 0)
+		this->F1 = c / 2.0;
+		this->F2 = -(c / 2.0);
+		this->c = c;
+		if (this->c == 0)
 			this->state = "Point";
 		else
 			this->state = "Lemniscat";
 	}
-		
+
 }
 
 //void LemniscatClass::set_fi(double fi)
@@ -154,92 +124,59 @@ void LemniscatClass::set_c(double c)
 
 void LemniscatClass::set_Foc(Point F1, Point F2)
 {
-	if (F1.y != 0 || F2.y != 0)
-		throw std::exception("Illegal focuses");
+	double	p1 = abs(F1.x) * abs(F2.x);
+	double c = 2 * p1;
+
+	this->F1 = F1;
+	this->F2 = F2;
+	this->c = c;
+	if (c == 0)
+		this->state = "Point";
 	else
-	{
-		double	p1 = abs(F1.x) * abs(F2.x);
-		double c = 2 * p1;
-
-		this->F1.x = F1;
-		this->F2.x = F2;
-		this->F1.active = true;
-		this->F2.active = true;
-		this->c.x = c;
-		this->c.active = true;
-
-		if (c == 0)
-			this->state = "Point";
-		else
-			this->state = "Lemniscat";
-	}
+		this->state = "Lemniscat";
 }
 
 
 double LemniscatClass::SqPolarSec(double fi) const
 {
-	if (fi < -1 || fi > 1 || abs(2 * fi) > 1)
-	{
-		throw std::exception("Not good fi");
-	}
-	if (this->c.active != true)
-	{
-		throw std::exception("No parametre c in class");
-	}
+	if (fi <= 0)
+		throw std::exception("Illegal fi");
 	double S;
-	S = ((this->c.x * this->c.x) / 2.0) * sin(2 * fi);
+	S = ((this->c * this->c) / 2.0) * abs(sin(2 * (fi * 180 / M_PI)));
 	return S;
 }
 
 double LemniscatClass::SqLem() const
 {
-	if (this->c.active != true)
-	{
-		throw std::exception("No parametre c in class");
-	}
 	double S;
-	S = ((this->c.x * this->c.x) / 2.0) * (4.0 / (double)M_PI);	
+	S = ((this->c * this->c) / 2.0) * (4.0 / (double)M_PI);
 	return (S + S);
 }
 
 double LemniscatClass::RadOfRad(double ro) const
 {
-	if (this->c.active != true)
-	{
-		throw std::exception("No parametre c in class");
-	}
+	if (ro <= 0)
+		throw std::exception("Illegal ro");
 	double R;
-	R = (2.0 * (this->c.x * this->c.x)) / (3.0 * abs(ro));
+	R = (2.0 * (this->c * this->c)) / (3.0 * ro);
 	return R;
 }
 
 double LemniscatClass::RadOfAngle(double fi) const
 {
-	if (fi < -1 || fi > 1 || abs(2 * fi) > 1)
-	{
-		throw std::exception("Not good fi");
-	}
-	if (this->c.active != true)
-	{
-		throw std::exception("No parametre c in class");
-	}
+	if (fi < 0)
+		throw std::exception("Illegal fi");
 	double R;
-	R = ((2.0 * (this->c.x * this->c.x))) / (3 * sqrt(2 * (this->c.x * this->c.x) * cos(2 * fi)));
+	R = ((2.0 * (this->c * this->c))) / (3 * sqrt(2 * (this->c * this->c) * abs(cos(2 * (fi * 180 / M_PI)))));
 	return R;
 }
 
 double LemniscatClass::Len2Cent(double fi) const
 {
 	double ro = 0;
-	if (fi < -1 || fi > 1 || abs(2 * fi) > 1)
-	{
-		throw std::exception("Not good fi");
-	}
-	if (this->c.active != true)
-	{
-		throw std::exception("No parametre c in class");
-	}
-	ro = sqrt(2 * this->c.x * this->c.x * cos(2 * fi));
+	if (fi < 0)
+		throw std::exception("Illegal fi");
+	ro = sqrt(2 * this->c * this->c * abs(cos(2 * (fi * 180 / M_PI))));
 	return ro;
 }
 
@@ -249,9 +186,3 @@ std::ostream & operator<<(std::ostream & out, const Point & point)
 	return out;
 }
 
-Paramentr_point & Paramentr_point::operator=(const Point & right)
-{
-	x.x = right.x;
-	x.y = right.y;
-	return *this;
-}
