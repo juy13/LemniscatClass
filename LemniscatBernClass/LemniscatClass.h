@@ -15,15 +15,14 @@ class LemniscatClass
 {
 private:
 	double c;
-	Point F1;
-	Point F2;
+	//Point F1;
+	//Point F2;
 	std::string state = "Point";
 
 	/*double get_c_p(Point a) const;*/
 
 public:
 	LemniscatClass(double c = 3);
-	LemniscatClass(Point f1, Point f2);
 	~LemniscatClass();
 
 	/*геттеры и сеттеры */
@@ -31,12 +30,12 @@ public:
 	std::string get_st() const;
 	//double get_fi() const;
 	//double get_ro() const;
-	Point get_F1() const;
-	Point get_F2() const;
+	//Point get_F1() const;
+	//Point get_F2() const;
 
 	void set_c(double c);
 	/*void set_fi(double fi);*/
-	void set_Foc(Point F1, Point F2);
+	/*void set_Foc(Point F1, Point F2);*/
 
 	/* методы класса */
 	double SqPolarSec(double fi) const;

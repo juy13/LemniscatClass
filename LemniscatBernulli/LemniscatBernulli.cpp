@@ -107,7 +107,7 @@ N1:
 		double choice;
 		std::cout << "Enter your choice to continue or press ctrl+Z to quit:" << std::endl;
 		std::cout << "1) Input c " << std::endl;
-		std::cout << "2) Input F1 and F2" << std::endl;
+		/*std::cout << "2) Input F1 and F2" << std::endl;*/
 		std::cout << "Your choice: ";
 		std::cin >> choice;
 		if (std::cin.good()) 
@@ -127,7 +127,7 @@ N1:
 				}
 			}
 
-			if (choice == 2)
+			/*if (choice == 2)
 			{
 				try
 				{
@@ -148,7 +148,7 @@ N1:
 				{
 					std::cout << ex.what() << std::endl;
 				}
-			}
+			}*/
 			
 		}
 		else
